@@ -36,30 +36,30 @@ export class IncidentController {
 
   async getAll(req: Request, res: Response) {
     const incidents = await this.getAllIncidents.execute();
-    res.json(incidents);
+
+    const response: IncidentResponse[] = incidents.map(incident => IncidentMapper.toResponseDTO(incident));
+  
+    res.status(200).json(response);
   }
 
   async update(req: Request, res: Response) {
-    try {
+    
       const { id } = req.params;
       const { title, description } = req.body;
       const createdBy = req.headers['x-created-by'] as string;
+  
       const incident = await this.updateIncident.execute(id, { title, description, createdBy});
-      res.json(incident);
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
+  
+      const response: IncidentResponse = IncidentMapper.toResponseDTO(incident);
+  
+      res.json(response);
   }
 
   async delete(req: Request, res: Response) {
     const incidentId = req.params.id;
     const currentUserId = req.user.id;
   
-    try {
-      await this.deleteIncident.execute(incidentId, currentUserId);
-      res.status(204).send();
-    } catch (error) {
-      res.status(403).json({ error: error });
-    }
+    await this.deleteIncident.execute(incidentId, currentUserId);
+    res.status(204).send();
   }
 }

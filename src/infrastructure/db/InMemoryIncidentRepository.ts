@@ -14,7 +14,6 @@ export class InMemoryIncidentRepository implements IncidentRepository {
   }
 
   async findAll(): Promise<Incident[]> {
-    console.log(this.incidents);
     return this.incidents;
   }
 
