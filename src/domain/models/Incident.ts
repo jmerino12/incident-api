@@ -4,7 +4,7 @@ export class Incident {
     public title: string,
     public description: string,
     public priority: 'low' | 'medium' | 'high',
-    public createdBy: String
+    public createdBy: string
   ) {
     if (!title || title.length < 5) throw new Error('Invalid title');
     if (!description) throw new Error('Description is required');

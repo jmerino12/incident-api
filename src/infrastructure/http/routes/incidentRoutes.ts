@@ -16,7 +16,7 @@ router.post('/',
     body('severity').isIn(['low', 'medium', 'high']).withMessage('Severity must be one of: low, medium, high'),
     validateFields
     , (req, res) => controller.create(req, res));
-router.get('/', authMiddleware, (req, res) => controller.getAll(req, res));
+router.get('/', (req, res) => controller.getAll(req, res));
 router.put('/incidents/:id', authMiddleware, (req, res) => controller.update(req, res));
 router.delete('/incident/:id', authMiddleware, (req, res) => controller.delete(req, res));
 

@@ -6,15 +6,15 @@ export class InMemoryIncidentRepository implements IncidentRepository {
   private incidents: Incident[] = [];
 
   async create(data: Omit<Incident, 'id'>): Promise<Incident> {
-    const newIncident: Incident = {
-      id: uuid(),
-      ...data,
-    };
+    const id = uuid(); 
+    const newIncident = new Incident(id, data.title, data.description, data.priority, data.createdBy);
+    
     this.incidents.push(newIncident);
     return newIncident;
   }
 
   async findAll(): Promise<Incident[]> {
+    console.log(this.incidents);
     return this.incidents;
   }
 
