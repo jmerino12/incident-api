@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import 'reflect-metadata';
 import express from 'express';
 import incidentRoutes from './infrastructure/http/routes/incidentRoutes';
 import rateLimit from 'express-rate-limit';
 import { errorHandler } from './infrastructure/http/middlewares/errorHandler';
+import { db } from './shared/config/database';
 
 const app = express();
 app.use(express.json());
@@ -23,5 +26,14 @@ app.get('/ping', (req, res) => {
   
 app.use(errorHandler);
 
-const PORT = 8000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+(async () => {
+  try {
+    await db.authenticate();
+    console.log('✅ Conexión a la base de datos establecida correctamente.' );
+  } catch (error) {
+    console.error('❌ Error al conectar con la base de datos:', error);
+  }
+})();
