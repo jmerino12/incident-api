@@ -1,4 +1,3 @@
-
 import { injectable, inject } from 'inversify';
 import { IncidentRepository } from '../ports/IncidentRepository';
 

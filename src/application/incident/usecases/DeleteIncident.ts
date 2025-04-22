@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { IncidentRepository } from "../ports/IncidentRepository";
-import { HttpError } from "../../domain/errors/HttpError";
+import { HttpError } from '../../../domain/shared/errors/HttpError';
 
 @injectable()
 export class DeleteIncident {

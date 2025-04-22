@@ -1,6 +1,6 @@
-import { IncidentRepository } from '../../application/ports/IncidentRepository';
-import { Incident } from '../../domain/models/Incident';
 import { v4 as uuid } from 'uuid';
+import { Incident } from '../../../domain/incident/models/Incident';
+import { IncidentRepository } from '../../../application/incident/ports/IncidentRepository';
 
 export class InMemoryIncidentRepository implements IncidentRepository {
   private incidents: Incident[] = [];

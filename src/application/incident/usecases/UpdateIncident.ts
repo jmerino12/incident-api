@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
-import { Incident } from "../../domain/models/Incident";
-import { IncidentPriorityService } from "../../domain/services/IncidentPriorityService";
 import { IncidentRepository } from "../ports/IncidentRepository";
+import { Incident } from "../../../domain/incident/models/Incident";
+import { IncidentPriorityService } from "../../../domain/incident/services/IncidentPriorityService";
 
 @injectable()
 export class UpdateIncident {

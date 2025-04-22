@@ -1,4 +1,4 @@
-import { Incident } from '../../domain/models/Incident';
+import { Incident } from "../../../domain/incident/models/Incident";
 
 export interface IncidentRepository {
   create(data: Incident): Promise<Incident>;

@@ -1,15 +1,15 @@
 import { Container } from 'inversify';
-import { sequelize } from '../shared/config/database';
-import { IncidentController } from '../infrastructure/http/controllers/IncidentController';
-import { CreateIncident } from '../application/usecases/CreateIncident';
-import { GetAllIncidents } from '../application/usecases/GetAllIncidents';
-import { DeleteIncident } from '../application/usecases/DeleteIncident';
-import { UpdateIncident } from '../application/usecases/UpdateIncident';
-import { GetIncidentById } from '../application/usecases/GetIncidentById';
-import { IncidentRepository } from '../application/ports/IncidentRepository';
-import { IncidentSequalizeRepository } from '../infrastructure/db/IncidentSequalizeRepository';
 import { Sequelize } from 'sequelize';
+import { sequelize } from '../shared/config/database';
 import { Server } from '../infrastructure/server/Server';
+import { CreateIncident } from '../application/incident/usecases/CreateIncident';
+import { GetAllIncidents } from '../application/incident/usecases/GetAllIncidents';
+import { GetIncidentById } from '../application/incident/usecases/GetIncidentById';
+import { DeleteIncident } from '../application/incident/usecases/DeleteIncident';
+import { UpdateIncident } from '../application/incident/usecases/UpdateIncident';
+import { IncidentRepository } from '../application/incident/ports/IncidentRepository';
+import { IncidentController } from '../infrastructure/incident/http/controllers/IncidentController';
+import { IncidentSequalizeRepository } from '../infrastructure/incident/db/IncidentSequalizeRepository';
 
 const container = new Container();
 

@@ -1,8 +1,8 @@
 import { QueryTypes, Sequelize } from "sequelize";
-import { IncidentRepository } from "../../application/ports/IncidentRepository";
-import { Incident } from "../../domain/models/Incident";
 import { inject, injectable } from "inversify";
 import { IncidentModel } from "./models/IncidentModel";
+import { Incident } from "../../../domain/incident/models/Incident";
+import { IncidentRepository } from "../../../application/incident/ports/IncidentRepository";
 
 @injectable()
 export class IncidentSequalizeRepository implements IncidentRepository {

@@ -1,4 +1,4 @@
-import { Incident } from "../../../domain/models/Incident";
+import { Incident } from "../../../../domain/incident/models/Incident";
 import { IncidentResponse } from "../dtos/IncidentResponse";
 
 export class IncidentMapper {

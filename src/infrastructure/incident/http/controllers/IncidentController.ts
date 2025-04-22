@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { injectable, inject } from 'inversify';
-import { CreateIncident } from '../../../application/usecases/CreateIncident';
-import { GetAllIncidents } from '../../../application/usecases/GetAllIncidents';
-import { UpdateIncident } from '../../../application/usecases/UpdateIncident';
-import { DeleteIncident } from '../../../application/usecases/DeleteIncident';
-import { GetIncidentById } from '../../../application/usecases/GetIncidentById';
 import { CreateIncidentRequest } from '../dtos/CreateIncidentRequest';
 import { IncidentResponse } from '../dtos/IncidentResponse';
 import { IncidentMapper } from '../mappers/IncidentMapper';
+import { CreateIncident } from '../../../../application/incident/usecases/CreateIncident';
+import { GetAllIncidents } from '../../../../application/incident/usecases/GetAllIncidents';
+import { GetIncidentById } from '../../../../application/incident/usecases/GetIncidentById';
+import { UpdateIncident } from '../../../../application/incident/usecases/UpdateIncident';
+import { DeleteIncident } from '../../../../application/incident/usecases/DeleteIncident';
 
 @injectable()
 export class IncidentController {

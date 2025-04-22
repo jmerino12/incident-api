@@ -3,11 +3,12 @@ import { Sequelize } from 'sequelize';
 import 'reflect-metadata';
 import { injectable,inject } from 'inversify';
 import rateLimit from 'express-rate-limit';
-import incidentRoutes from '../http/routes/incidentRoutes';
-import { errorHandler } from '../http/middlewares/errorHandler';
-import { defineIncidentModel } from '../db/models/IncidentModel';
-import { IncidentController } from '../http/controllers/IncidentController';
-import authRoutes from '../http/routes/authRoutes';
+import authRoutes from '../incident/http/routes/authRoutes';
+import incidentRoutes from '../incident/http/routes/incidentRoutes';
+import { errorHandler } from '../incident/http/middlewares/errorHandler';
+import { defineIncidentModel } from '../incident/db/models/IncidentModel';
+import { IncidentController } from '../incident/http/controllers/IncidentController';
+
 
 @injectable()
 export class Server {
