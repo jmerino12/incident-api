@@ -25,7 +25,7 @@ export class IncidentController {
       title: req.body.title,
       description: req.body.description,
       severity: req.body.severity,
-      createdBy: req.headers['x-created-by'] as string
+      createdBy: Number(req.headers['x-created-by'])
     };
 
     const incident = await this.createIncident.execute(data);
@@ -47,7 +47,7 @@ export class IncidentController {
 
     const { id } = req.params;
     const { title, description } = req.body;
-    const createdBy = req.headers['x-created-by'] as string;
+    const createdBy = Number(req.headers['x-created-by']);
 
     const incident = await this.updateIncident.execute(id, { title, description, createdBy });
 
@@ -60,7 +60,7 @@ export class IncidentController {
     const { id } = req.params;
     const currentUserId = req.user.id;
 
-    await this.deleteIncident.execute(id, currentUserId);
+    await this.deleteIncident.execute(id, Number(currentUserId));
     res.status(204).send();
   }
 

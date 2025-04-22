@@ -8,7 +8,7 @@ export class DeleteIncident {
     @inject('IncidentRepository') private incidentRepository: IncidentRepository
   ) { }
 
-  async execute(incidentId: string, currentUserId: string): Promise<void> {
+  async execute(incidentId: string, currentUserId: number): Promise<void> {
     const incident = await this.incidentRepository.findById(incidentId);
 
     if (!incident) {

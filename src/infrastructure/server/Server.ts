@@ -6,8 +6,10 @@ import rateLimit from 'express-rate-limit';
 import authRoutes from '../incident/http/routes/authRoutes';
 import incidentRoutes from '../incident/http/routes/incidentRoutes';
 import { errorHandler } from '../incident/http/middlewares/errorHandler';
-import { defineIncidentModel } from '../incident/db/models/IncidentModel';
+import { defineIncidentModel, IncidentModel } from '../incident/db/models/IncidentModel';
+import { defineUserModel, UserModel } from '../user/db/models/UserModel';
 import { IncidentController } from '../incident/http/controllers/IncidentController';
+
 
 
 @injectable()
@@ -24,6 +26,7 @@ export class Server {
 
     this.dbConnection();
     this.initModels();
+    this.initAssociations();
     this.middlewares();
     this.routes();
   }
@@ -72,5 +75,22 @@ export class Server {
 
   private initModels() {
     defineIncidentModel(this.sequelize);
+    defineUserModel(this.sequelize);
+  }
+
+  private async initAssociations() {
+    UserModel.hasMany(IncidentModel, {
+      sourceKey: 'id',
+      foreignKey: 'created_by',
+      as: 'incidents'
+    });
+  
+    IncidentModel.belongsTo(UserModel, {
+      foreignKey: 'created_by',
+      as: 'user'
+    });
+
+    await this.sequelize.sync({ alter: true });
+    console.log('📦 Modelos sincronizados con la base de datos');
   }
 }

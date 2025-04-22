@@ -9,7 +9,7 @@ export class UpdateIncident {
     @inject('IncidentRepository') private incidentRepository: IncidentRepository
   ) { }
   
-    async execute(id: string, data: { title: string; description: string, createdBy: string }): Promise<Incident> {
+    async execute(id: string, data: { title: string; description: string, createdBy: number }): Promise<Incident> {
       const existing = await this.incidentRepository.findById(id);
       if (!existing) throw new Error('Incident not found');
   
