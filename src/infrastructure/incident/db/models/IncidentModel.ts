@@ -37,21 +37,20 @@ export const defineIncidentModel = (sequelize: Sequelize) => {
       type: DataTypes.STRING,
     },
     created_by: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
-      }
-    },
-    created_at: {
-      type: DataTypes.DATE,
-    },
+        key: 'identification'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    }
   }, {
     sequelize,
     modelName: 'Incident',
     tableName: 'incidents',
-    timestamps: false,
+    timestamps: true,
   });
 
   return IncidentModel;
