@@ -11,7 +11,10 @@ export class CreateUser {
 
     async execute(data: { identification: string, name: string, email: string }) {
         const exists = await this.repository.findById(data.identification);
-        if (exists) throw new HttpError('Incident with this title already exists', 400);
+        if (exists) throw new HttpError('This identification already exists', 400);
+
+        const existEmail = await this.repository.findByEmail(data.email);
+        if (existEmail) throw new HttpError('This email already exists', 400);
 
         const user = new User(data.identification, data.name, data.email);
 

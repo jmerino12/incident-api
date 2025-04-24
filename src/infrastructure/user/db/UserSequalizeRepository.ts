@@ -36,17 +36,15 @@ export class UserSequalizeRepository implements UserRepository {
             }
         );
 
-        console.log(rows);
-
         return (rows).map(row => new User(
-            String(row.id),
+            String(row.identification),
             row.name,
             row.email,
         ));
     }
     async update(user: User): Promise<User> {
         await this.db.query(
-            'UPDATE users SET name = ?, email = ?, WHERE id = ?',
+            'UPDATE users SET name = ?, email = ? WHERE identification = ?',
             {
                 replacements: [user.name, user.email, user.id],
                 type: QueryTypes.UPDATE,
@@ -75,7 +73,34 @@ export class UserSequalizeRepository implements UserRepository {
             row.email,
         );
     }
+
+    async findByEmail(email: string): Promise<User | null> {
+        const rows = await this.db.query(
+            'SELECT * FROM users WHERE email = ?',
+            {
+                replacements: [email],
+                model: UserModel,
+                mapToModel: true,
+                type: QueryTypes.SELECT
+            }
+        );
+
+        const row = (rows)[0];
+        if (!row) return null;
+
+        return new User(
+            String(row.id),
+            row.name,
+            row.email,
+        );
+    }
     async delete(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.db.query(
+            'DELETE FROM users WHERE identification = ?',
+            {
+                replacements: [id],
+                type: QueryTypes.DELETE,
+            }
+        );
     }
 }

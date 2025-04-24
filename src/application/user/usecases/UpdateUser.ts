@@ -5,14 +5,14 @@ import { User } from "../../../domain/user/models/User";
 @injectable()
 export class UpdateUser {
   constructor(
-    @inject('IncidentRepository') private repository: UserRepository
+    @inject('UserRepository') private repository: UserRepository
   ) { }
   
-    async execute(data: { identification: string; name: string, email: string }): Promise<User> {
-      const existing = await this.repository.findById(data.identification);
-      if (!existing) throw new Error('Incident not found');
+    async execute(data: { id: string; name: string, email: string }): Promise<User> {
+      const existing = await this.repository.findById(data.id);
+      if (!existing) throw new Error('User not found');
   
-      const updated = new User(data.identification, data.name, data.email);
+      const updated = new User(data.id, data.name, data.email);
   
       return this.repository.update(updated);
     }

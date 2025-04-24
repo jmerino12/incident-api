@@ -12,9 +12,18 @@ export default function usertRoutes(controller: UserController): Router {
     body('email').isString().isEmail().isLength({ min: 2 }).withMessage('email is required'),
     validateFields,
     (req, res) => controller.create(req, res));
+
   router.get('/', (req, res) => controller.getAll(req, res));
+
   router.get('/:id', (req, res) => controller.getById(req, res));
-  router.put('/:id', (req, res) => controller.update(req, res));
+
+  router.put('/:id', 
+    body('name').isString().isLength({ min: 7 }).withMessage('name is required'),
+    body('email').isString().isEmail().isLength({ min: 2 }).withMessage('email is required'), 
+    validateFields, 
+    (req, res) => controller.update(req, res));
+
   router.delete('/:id', (req, res) => controller.delete(req, res));
+  
   return router;
 }

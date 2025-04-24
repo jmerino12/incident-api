@@ -32,26 +32,42 @@ export class UserController {
     }
 
     async getAll(req: Request, res: Response) {
-       const users = await this.getAllUser.execute();
-   
-       const response: UserResponse[] = users.map(user => UserMapper.toResponseDTO(user));
-   
-       res.status(200).json(response);
+        const users = await this.getAllUser.execute();
+
+        const response: UserResponse[] = users.map(user => UserMapper.toResponseDTO(user));
+
+        res.status(200).json(response);
 
     }
 
     async update(req: Request, res: Response) {
-        res.status(201).json();
+        const { id } = req.params;
+        const { name, email } = req.body;
+
+        const user = await this.updateUser.execute({ id, name, email });
+
+        const response: UserResponse = UserMapper.toResponseDTO(user);
+
+        res.json(response);
 
     }
 
     async delete(req: Request, res: Response) {
-        res.status(201).json();
+        const { id } = req.params;
+
+        await this.deleteUser.execute(id);
+        res.status(204).send();
 
     }
 
     async getById(req: Request, res: Response) {
-        res.status(201).json();
+         const { id } = req.params;
+     
+         const user = await this.getUserById.execute(id);
+         
+         const response = UserMapper.toResponseDTO(user);
+         
+         res.status(200).json(response);
 
     }
 }

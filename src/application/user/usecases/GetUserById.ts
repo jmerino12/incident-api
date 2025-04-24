@@ -10,12 +10,12 @@ export class GetUserById {
   ) { }
 
   async execute(identification: string): Promise<User> {
-    const incident = await this.repository.findById(identification);
+    const user = await this.repository.findById(identification);
 
-    if (!incident) {
-      throw new HttpError('Incident not found', 404);
+    if (!user) {
+      throw new HttpError('User not found', 404);
     }
 
-    return incident;
+    return user;
   }
 }
