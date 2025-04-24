@@ -3,6 +3,8 @@ import { inject, injectable } from "inversify";
 import { IncidentModel } from "./models/IncidentModel";
 import { Incident } from "../../../domain/incident/models/Incident";
 import { IncidentRepository } from "../../../application/incident/ports/IncidentRepository";
+import { IncidentWithUser } from "../../../domain/incident/models/IncidentWithUser";
+import { User } from "../../../domain/user/models/User";
 
 @injectable()
 export class IncidentSequalizeRepository implements IncidentRepository {
@@ -33,21 +35,28 @@ export class IncidentSequalizeRepository implements IncidentRepository {
 
     async findAll(): Promise<Incident[]> {
         const rows = await this.db.query(
-            'SELECT * FROM incidents',
+            'SELECT incidents.*, users.id AS user_id, users.name AS user_name, users.email AS user_email ' +
+            'FROM incidents ' +
+            'JOIN users ON incidents.created_by = users.identification',
             {
                 type: QueryTypes.SELECT,
-                mapToModel: true,
-                model: IncidentModel
+                raw: true
             }
         );
 
-        return (rows).map(row => new Incident(
+        return rows.map((row: any) => new IncidentWithUser(
             String(row.id),
             row.title,
             row.description,
             row.status,
-            row.created_by
-        ));
+            row.created_by,
+            new User(
+              String(row.created_by),
+              row.user_name,
+              row.user_email
+            )
+          ));
+          
     }
 
     async update(data: Incident): Promise<Incident> {

@@ -8,6 +8,7 @@ import { GetAllIncidents } from '../../../../application/incident/usecases/GetAl
 import { GetIncidentById } from '../../../../application/incident/usecases/GetIncidentById';
 import { UpdateIncident } from '../../../../application/incident/usecases/UpdateIncident';
 import { DeleteIncident } from '../../../../application/incident/usecases/DeleteIncident';
+import { IncidentWithUser } from '../../../../domain/incident/models/IncidentWithUser';
 
 @injectable()
 export class IncidentController {
@@ -27,11 +28,10 @@ export class IncidentController {
       severity: req.body.severity,
       createdBy: req.user.id //Number(req.headers['x-created-by'])
     };
-    const bearerToken = req.headers.authorization
 
     const incident = await this.createIncident.execute(data);
 
-    const response: IncidentResponse = IncidentMapper.toResponseDTO(incident);
+    const response = IncidentMapper.toResponseDTO(incident);
 
     res.status(201).json(response);
   }
@@ -39,8 +39,10 @@ export class IncidentController {
   async getAll(req: Request, res: Response) {
     const incidents = await this.getAllIncidents.execute();
 
-    const response: IncidentResponse[] = incidents.map(incident => IncidentMapper.toResponseDTO(incident));
-
+    const response = (incidents as IncidentWithUser[]).map(incident =>
+      IncidentMapper.toResponseDTO(incident, incident.user) 
+    );
+  
     res.status(200).json(response);
   }
 
@@ -52,7 +54,7 @@ export class IncidentController {
 
     const incident = await this.updateIncident.execute(id, { title, description, createdBy });
 
-    const response: IncidentResponse = IncidentMapper.toResponseDTO(incident);
+    const response = IncidentMapper.toResponseDTO(incident);
 
     res.json(response);
   }
@@ -69,8 +71,9 @@ export class IncidentController {
     const { id } = req.params;
 
     const incident = await this.getIncidentById.execute(id);
-    
-    const response = IncidentMapper.toResponseDTO(incident);
+    const incidentWithUser = incident as IncidentWithUser;
+   
+    const response = IncidentMapper.toResponseDTO(incidentWithUser, incidentWithUser.user);
     
     res.status(200).json(response);
   }
