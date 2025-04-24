@@ -50,7 +50,7 @@ export class IncidentController {
 
     const { id } = req.params;
     const { title, description } = req.body;
-    const createdBy = Number(req.headers['x-created-by']);
+    const createdBy = req.headers['x-created-by'] as string;
 
     const incident = await this.updateIncident.execute(id, { title, description, createdBy });
 

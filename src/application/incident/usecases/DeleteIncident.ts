@@ -15,7 +15,7 @@ export class DeleteIncident {
       throw new HttpError('Incident not found', 404);
     }
 
-    if (incident.createdBy !== currentUserId) {
+    if (incident.createdBy !== currentUserId.toString()) {
       throw new HttpError('Unauthorized to delete this incident', 403);
     }
 
