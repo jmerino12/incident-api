@@ -25,8 +25,9 @@ export class IncidentController {
       title: req.body.title,
       description: req.body.description,
       severity: req.body.severity,
-      createdBy: Number(req.headers['x-created-by'])
+      createdBy: req.user.id //Number(req.headers['x-created-by'])
     };
+    const bearerToken = req.headers.authorization
 
     const incident = await this.createIncident.execute(data);
 

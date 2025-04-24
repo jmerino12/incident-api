@@ -10,7 +10,7 @@ export class CreateIncident {
     @inject('IncidentRepository') private incidentRepository: IncidentRepository
   ) {}
 
-  async execute(data: { title: string; description: string, createdBy: number }) {
+  async execute(data: { title: string; description: string, createdBy: string }) {
     const exists = await this.incidentRepository.findByTitle(data.title);
     if (exists) throw new HttpError('Incident with this title already exists', 400);
 

@@ -1,6 +1,6 @@
 export interface CreateIncidentRequest {
     title: string;
     description: string;
-    createdBy: number;
+    createdBy: string;
     severity: 'low' | 'medium' | 'high';
   }

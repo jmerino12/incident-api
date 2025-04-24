@@ -5,7 +5,7 @@ export interface IncidentAttributes {
   title: string;
   description: string;
   status: "low" | "medium" | "high";
-  created_by: number;
+  created_by: string;
   created_at?: Date;
 }
 
@@ -16,7 +16,7 @@ export class IncidentModel extends Model<IncidentAttributes, IncidentCreationAtt
   public title!: string;
   public description!: string;
   public status!:  "low" | "medium" | "high";
-  public created_by!: number;
+  public created_by!: string;
   public created_at!: Date;
 }
 
@@ -50,7 +50,7 @@ export const defineIncidentModel = (sequelize: Sequelize) => {
     sequelize,
     modelName: 'Incident',
     tableName: 'incidents',
-    timestamps: true,
+    timestamps: false,
   });
 
   return IncidentModel;
