@@ -8,6 +8,7 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 export default function incidentRoutes(controller: IncidentController): Router {
   const router = Router();
   router.post('/',
+    authMiddleware, 
     validateCreatedByHeader,
     body('title').isString().isLength({ min: 3 }).withMessage('Title is required and must be at least 3 characters long'),
     body('description').optional().isString(),

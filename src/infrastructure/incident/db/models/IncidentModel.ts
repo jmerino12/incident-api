@@ -1,5 +1,3 @@
-// db/models/IncidentModel.ts
-
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 
 export interface IncidentAttributes {
@@ -40,10 +38,14 @@ export const defineIncidentModel = (sequelize: Sequelize) => {
     },
     created_by: {
       type: DataTypes.STRING,
-    },
-    created_at: {
-      type: DataTypes.DATE,
-    },
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'identification'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
+    }
   }, {
     sequelize,
     modelName: 'Incident',

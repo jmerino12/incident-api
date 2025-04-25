@@ -5,9 +5,12 @@ import { injectable,inject } from 'inversify';
 import rateLimit from 'express-rate-limit';
 import authRoutes from '../incident/http/routes/authRoutes';
 import incidentRoutes from '../incident/http/routes/incidentRoutes';
+import usertRoutes from '../user/http/routes/userRoutes';
 import { errorHandler } from '../incident/http/middlewares/errorHandler';
-import { defineIncidentModel } from '../incident/db/models/IncidentModel';
+import { defineIncidentModel, IncidentModel } from '../incident/db/models/IncidentModel';
+import { defineUserModel, UserModel } from '../user/db/models/UserModel';
 import { IncidentController } from '../incident/http/controllers/IncidentController';
+import { UserController } from '../user/http/controllers/UserController';
 
 
 @injectable()
@@ -17,13 +20,15 @@ export class Server {
 
   constructor(
     @inject('Sequelize') private sequelize: Sequelize,
-    @inject(IncidentController) private incidentController: IncidentController
+    @inject(IncidentController) private incidentController: IncidentController,
+    @inject(UserController) private userController: UserController
   ) {
     this.app = express();
     this.port = process.env.PORT || '8000';
 
     this.dbConnection();
     this.initModels();
+    this.initAssociations();
     this.middlewares();
     this.routes();
   }
@@ -51,6 +56,7 @@ export class Server {
 
   private routes() {
     this.app.use('/incidents', incidentRoutes(this.incidentController));
+    this.app.use('/users', usertRoutes(this.userController));
     this.app.use('/auth', authRoutes());
 
     this.app.get('/ping', (_, res) => {
@@ -72,5 +78,23 @@ export class Server {
 
   private initModels() {
     defineIncidentModel(this.sequelize);
+    defineUserModel(this.sequelize);
+  }
+
+  private async initAssociations() {
+    UserModel.hasMany(IncidentModel, {
+      sourceKey: 'identification',
+      foreignKey: 'created_by',
+      as: 'incidents'
+    });
+  
+    IncidentModel.belongsTo(UserModel, {
+      targetKey: 'identification',
+      foreignKey: 'created_by',
+      as: 'user',
+    });
+
+    await this.sequelize.sync({ alter: true, force: true });
+    console.log('📦 Modelos sincronizados con la base de datos');
   }
 }
