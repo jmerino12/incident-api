@@ -1,4 +1,5 @@
 import { Container } from 'inversify';
+import { RabbitMQConnection } from '../infrastructure/server/RabbitMQConnection';
 import { Sequelize } from 'sequelize';
 import { sequelize } from '../shared/config/database';
 import { Server } from '../infrastructure/server/Server';
@@ -18,6 +19,9 @@ import { GetUserById } from '../application/user/usecases/GetUserById';
 import { DeleteUser } from '../application/user/usecases/DeleteUser';
 import { UpdateUser } from '../application/user/usecases/UpdateUser';
 import { UserController } from '../infrastructure/user/http/controllers/UserController';
+import { RabbitMqEventPublisher } from '../infrastructure/events/RabbitMqEventPublisher';
+import { EventPublisher } from '../application/incident/ports/IncidentEventPublisher';
+import { IncidentCreatedConsumer } from '../infrastructure/events/consumers/IncidentCreatedConsumer';
 
 const container = new Container();
 
@@ -40,5 +44,9 @@ container.bind(UpdateUser).toSelf();
 container.bind(IncidentController).toSelf();
 container.bind(UserController).toSelf();
 container.bind(Server).toSelf();
+
+container.bind(RabbitMQConnection).toSelf().inSingletonScope();
+container.bind(IncidentCreatedConsumer).toSelf();
+container.bind<EventPublisher>('EventPublisher').to(RabbitMqEventPublisher);
 
 export { container };

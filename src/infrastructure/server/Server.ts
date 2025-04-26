@@ -11,6 +11,8 @@ import { defineIncidentModel, IncidentModel } from '../incident/db/models/Incide
 import { defineUserModel, UserModel } from '../user/db/models/UserModel';
 import { IncidentController } from '../incident/http/controllers/IncidentController';
 import { UserController } from '../user/http/controllers/UserController';
+import { RabbitMQConnection } from './RabbitMQConnection';
+import { IncidentCreatedConsumer } from '../events/consumers/IncidentCreatedConsumer';
 
 
 @injectable()
@@ -21,7 +23,9 @@ export class Server {
   constructor(
     @inject('Sequelize') private sequelize: Sequelize,
     @inject(IncidentController) private incidentController: IncidentController,
-    @inject(UserController) private userController: UserController
+    @inject(UserController) private userController: UserController,
+    @inject(RabbitMQConnection) private rabbitMQConnection: RabbitMQConnection,
+    @inject(IncidentCreatedConsumer) private incidentCreatedConsumer: IncidentCreatedConsumer 
   ) {
     this.app = express();
     this.port = process.env.PORT || '8000';
@@ -31,6 +35,8 @@ export class Server {
     this.initAssociations();
     this.middlewares();
     this.routes();
+    this.initRabbitMQ();
+    this.startConsumer();
   }
 
   private async dbConnection() {
@@ -96,5 +102,19 @@ export class Server {
 
     await this.sequelize.sync({ alter: true, force: true });
     console.log('📦 Modelos sincronizados con la base de datos');
+  }
+
+  private async initRabbitMQ() {
+    try {
+      console.log('⌛️ Conectando a RabbitMQ...');
+      await this.rabbitMQConnection.connect();
+      console.log('✅ Conexión a RabbitMQ establecida');
+    } catch (error) {
+      console.error('❌ Error al conectar con RabbitMQ:', error);
+    }
+  }
+
+  public async startConsumer() {
+    await this.incidentCreatedConsumer.start();
   }
 }
